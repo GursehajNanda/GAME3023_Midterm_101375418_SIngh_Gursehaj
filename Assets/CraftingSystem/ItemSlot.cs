@@ -7,98 +7,110 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 //Holds reference and count of items, manages their visibility in the Inventory panel
-public class ItemSlot : MonoBehaviour/*, IPointerEnterHandler, IPointerExitHandler*/,IDropHandler
+public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler
 {
-    //public Item item = null;
+    [HideInInspector]
+    public Item item = null;
+    private int count = 0;
+  
+    [SerializeField]
+    private TMPro.TextMeshProUGUI descriptionText;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI nameText;
+    
+   
 
-    //[SerializeField]
-    //private TMPro.TextMeshProUGUI descriptionText;
-    //[SerializeField]
-    //private TMPro.TextMeshProUGUI nameText;
+    public int Count
+    {
+        get { return count; }
+        set
+        {
+            count = value;
+            UpdateGraphic();
+        }
+    }
 
-    //[SerializeField]
-    //private int count = 0;
-    //public int Count
-    //{
-    //    get { return count; }
-    //    set
-    //    {
-    //        count = value;
-    //        UpdateGraphic();
-    //    }
-    //}
+   
+    // Start is called before the first frame update
+    void Start()
+    {
+       item = GetComponentInChildren<Item>();
+       if(item)
+       {
+         count = item.scriptableItem.itemcount;
+         UpdateGraphic();
+       }
+        
+    }
 
-    //[SerializeField]
-    //Image itemIcon;
+    private void Update()
+    {
+        //Refresh Item
+        item = GetComponentInChildren<Item>();
+    }
 
-    //[SerializeField]
-    //TextMeshProUGUI itemCountText;
+    //Change Icon and count
+    void UpdateGraphic()
+    {
+        
 
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    if (item != null)
-    //    { UpdateGraphic(); }
-    //}
+        if (count < 1)
+        {
+            item = null;
+            item.GetIcon().gameObject.SetActive(false);
+            item.GetItemCountText().gameObject.SetActive(false);
+        }
+        else
+        {
+            //set sprite to the one from the item
+            item.GetIcon().sprite = item.scriptableItem.icon;
+            item.GetIcon().gameObject.SetActive(true);
+            item.GetItemCountText().gameObject.SetActive(true);
+            item.GetItemCountText().text = count.ToString();
+        }
+    }
 
-    ////Change Icon and count
-    //void UpdateGraphic()
-    //{
-    //    if (count < 1)
-    //    {
-    //        item = null;
-    //        itemIcon.gameObject.SetActive(false);
-    //        itemCountText.gameObject.SetActive(false);
-    //    }
-    //    else
-    //    {
-    //        //set sprite to the one from the item
-    //        itemIcon.sprite = item.icon;
-    //        itemIcon.gameObject.SetActive(true);
-    //        itemCountText.gameObject.SetActive(true);
-    //        itemCountText.text = count.ToString();
-    //    }
-    //}
+    public void UseItemInSlot()
+    {
+        if (CanUseItem())
+        {
+            item.scriptableItem.Use();
+            if (item.scriptableItem.isConsumable)
+            {
+                Count--;
+            }
+        }
+    }
 
-    //public void UseItemInSlot()
-    //{
-    //    //if (CanUseItem())
-    //    //{
-    //    //    item.Use();
-    //    //    if (item.isConsumable)
-    //    //    {
-    //    //        Count--;
-    //    //    }
-    //    //}
-    //}
+    private bool CanUseItem()
+    {
+        return (item != null && count > 0);
+    }
 
-    //private bool CanUseItem()
-    //{
-    //    return (item != null && count > 0);
-    //}
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (item != null)
+        {
+            descriptionText.text = item.scriptableItem.description;
+            nameText.text = item.name;
+        }
+    }
 
-    //public void OnPointerEnter(PointerEventData eventData)
-    //{
-    //    if (item != null)
-    //    {
-    //        descriptionText.text = item.description;
-    //        nameText.text = item.name;
-    //    }
-    //}
-
-    //public void OnPointerExit(PointerEventData eventData)
-    //{
-    //    if(item != null)
-    //    {
-    //        descriptionText.text = "";
-    //        nameText.text = "";
-    //    }
-    //}
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (item != null)
+        {
+            descriptionText.text = "";
+            nameText.text = "";
+        }
+    }
 
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dropped = eventData.pointerDrag;
-        DraggableItem draggableItem = dropped.GetComponent<DraggableItem>();
+        Item draggableItem = dropped.GetComponent<Item>();
         draggableItem.parentAfterDrag = transform;
     }
+
+   
 }

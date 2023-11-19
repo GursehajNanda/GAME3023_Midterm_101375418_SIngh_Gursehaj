@@ -1,18 +1,63 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-//Attribute which allows right click->Create
-[CreateAssetMenu(fileName = "New Item", menuName = "Items/New Item")]
-public class Item : ScriptableObject //Extending SO allows us to have an object which exists in the project, not in the scene
+public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public Sprite icon;
-    [TextArea]
-    public string description = "";
-    public bool isConsumable = false;
+     private Image image;
+     private TextMeshProUGUI itemCountText;
 
-    public void Use()
+    [HideInInspector] public Transform parentAfterDrag;
+    public ScriptableItem scriptableItem;
+
+
+    private void Start()
     {
-        Debug.Log("This is the Use() function of item: " + name + " - " + description);
+        image = GetComponent<Image>();
+        itemCountText = GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Debug.Log("Begin Dragging");
+        parentAfterDrag = transform.parent;
+        transform.SetParent(transform.root);
+        transform.SetAsLastSibling();
+        image.raycastTarget = false;
+
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Debug.Log("On Drag");
+        transform.position = Input.mousePosition;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Debug.Log("End Drag");
+        transform.SetParent(parentAfterDrag);
+        image.raycastTarget = true;
+    }
+
+    public Image GetIcon()
+    {
+        return image;
+    }
+
+    public TextMeshProUGUI GetItemCountText()
+    {
+        return itemCountText;
+    }
+
+    public void SetIcon(Image icon)
+    {
+        image = icon;
+    }
+
+    public void SetCountText(string text)
+    {
+        itemCountText.SetText(text);
     }
 }
