@@ -5,14 +5,13 @@ using UnityEngine.EventSystems;
 
 public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-     private Image image;
-     private TextMeshProUGUI itemCountText;
+    private Image image;
+    private TextMeshProUGUI itemCountText;
 
     [HideInInspector] public Transform parentAfterDrag;
     public ScriptableItem scriptableItem;
 
-
-    private void Start()
+    public void InitializeItem()
     {
         image = GetComponent<Image>();
         itemCountText = GetComponentInChildren<TextMeshProUGUI>();
@@ -20,7 +19,6 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("Begin Dragging");
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
@@ -30,13 +28,11 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("On Drag");
         transform.position = Input.mousePosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("End Drag");
         transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
     }

@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-//Holds reference and count of items, manages their visibility in the Inventory panel
 public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler
 {
     [HideInInspector]
@@ -31,12 +30,12 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
    
-    // Start is called before the first frame update
     void Start()
     {
        item = GetComponentInChildren<Item>();
-       if(item)
+       if(item != null)
        {
+         item.InitializeItem();
          count = item.scriptableItem.itemcount;
          UpdateGraphic();
        }
@@ -45,15 +44,12 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void Update()
     {
-        //Refresh Item
         item = GetComponentInChildren<Item>();
     }
 
-    //Change Icon and count
+  
     void UpdateGraphic()
     {
-        
-
         if (count < 1)
         {
             item = null;
@@ -62,11 +58,11 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
         else
         {
-            //set sprite to the one from the item
             item.GetIcon().sprite = item.scriptableItem.icon;
             item.GetIcon().gameObject.SetActive(true);
             item.GetItemCountText().gameObject.SetActive(true);
             item.GetItemCountText().text = count.ToString();
+    
         }
     }
 
@@ -106,10 +102,25 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     public void OnDrop(PointerEventData eventData)
-    {
+    {   
         GameObject dropped = eventData.pointerDrag;
         Item draggableItem = dropped.GetComponent<Item>();
-        draggableItem.parentAfterDrag = transform;
+        if (transform.childCount == 0)
+        {
+            draggableItem.parentAfterDrag = transform;
+        }
+        else
+        {
+            if (draggableItem.scriptableItem.isStakable)
+            {
+                if (draggableItem.scriptableItem.name == item.scriptableItem.name)
+                {
+                    count += draggableItem.scriptableItem.itemcount;
+                    item.GetItemCountText().text = count.ToString();
+                    Destroy(draggableItem.gameObject);
+                }
+            }
+        }
     }
 
    
