@@ -10,37 +10,23 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [HideInInspector]
     public Item item = null;
-    private int count = 0;
+    //private int count = 0;
   
     [SerializeField]
     private TMPro.TextMeshProUGUI descriptionText;
     [SerializeField]
     private TMPro.TextMeshProUGUI nameText;
-    
-   
 
-    public int Count
+    private void Awake()
     {
-        get { return count; }
-        set
+        item = GetComponentInChildren<Item>();
+        if (item != null)
         {
-            count = value;
+            item.InitializeItem();
             UpdateGraphic();
         }
     }
 
-   
-    void Start()
-    {
-       item = GetComponentInChildren<Item>();
-       if(item != null)
-       {
-         item.InitializeItem();
-         count = item.scriptableItem.itemcount;
-         UpdateGraphic();
-       }
-        
-    }
 
     private void Update()
     {
@@ -50,7 +36,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
   
     void UpdateGraphic()
     {
-        if (count < 1)
+        if (item.scriptableItem.itemcount < 1)
         {
             item = null;
             item.GetIcon().gameObject.SetActive(false);
@@ -61,7 +47,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             item.GetIcon().sprite = item.scriptableItem.icon;
             item.GetIcon().gameObject.SetActive(true);
             item.GetItemCountText().gameObject.SetActive(true);
-            item.GetItemCountText().text = count.ToString();
+            item.GetItemCountText().text = item.scriptableItem.itemcount.ToString();
     
         }
     }
@@ -73,14 +59,14 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             item.scriptableItem.Use();
             if (item.scriptableItem.isConsumable)
             {
-                Count--;
+              //  Count--;
             }
         }
     }
 
     private bool CanUseItem()
     {
-        return (item != null && count > 0);
+        return (item != null && item.scriptableItem.itemcount > 0);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -115,8 +101,8 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             {
                 if (draggableItem.scriptableItem.name == item.scriptableItem.name)
                 {
-                    count += draggableItem.scriptableItem.itemcount;
-                    item.GetItemCountText().text = count.ToString();
+                    item.scriptableItem.itemcount += draggableItem.scriptableItem.itemcount;
+                    item.GetItemCountText().text = item.scriptableItem.itemcount.ToString();
                     Destroy(draggableItem.gameObject);
                 }
             }
