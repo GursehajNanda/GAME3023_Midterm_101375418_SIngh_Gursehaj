@@ -10,12 +10,7 @@ public class ScriptableItem : ScriptableObject //Extending SO allows us to have 
     public Sprite icon;
     [TextArea]
     public string description = "";
-    public bool isConsumable = false;
     public bool isStakable = false;
    
 
-    public void Use()
-    {
-        Debug.Log("This is the Use() function of item: " + name + " - " + description);
-    }
 }

@@ -9,15 +9,17 @@ public class CraftingInventory : MonoBehaviour
     List<string> SlotsIngredients = new List<string>();
     List<ItemSlot> itemSlots = new List<ItemSlot>();
 
+
     [SerializeField]
     Transform inventoryPanel;
     [SerializeField]
     ItemSlot outPutSlot;
-    //ScriptableRecipe scriptableRecipe;
     [SerializeField]
     public List<ScriptableRecipe> scriptableRecipes;
     [SerializeField]
     Sprite defaultImage;
+
+
 
     private void InitializeInventory()
     {
@@ -41,39 +43,36 @@ public class CraftingInventory : MonoBehaviour
             }
         }
 
-
-        if (SlotsIngredients.Count>0)
+        if (outPutSlot.item == null)
         {
-            //if (CraftRecipe(scriptableRecipe))
-            //{
-            //   outPutSlot.item.GetIcon().sprite = scriptableRecipe.OututItemSprite;
-            //}
-            //else
-            //{
-            //   outPutSlot.item.GetIcon().sprite = defaultImage;
-            //}
-
-            foreach (ScriptableRecipe recipe in scriptableRecipes)
+            if (SlotsIngredients.Count > 0)
             {
-                if (CraftRecipe(recipe))
-                {
-                    outPutSlot.item.GetIcon().sprite = recipe.OututItemSprite;
-                    break;
-                }
-                else
-                {
-                    outPutSlot.item.GetIcon().sprite = defaultImage;
-                }
-            }
 
-            RefreshInventory();
+                foreach (ScriptableRecipe recipe in scriptableRecipes)
+                {
+                    if (CraftRecipe(recipe))
+                    {
+                        Debug.Log("true");
+                        outPutSlot.AddIteminTheSlotWithScriptableItem(recipe.OutputItem,1, outPutSlot.transform);
+               
+
+                        foreach (ItemSlot slots in itemSlots)
+                        {
+                            slots.Initializtion(slots.GetItemCount() - recipe.ConsumeAmount);
+                        }
+                        break;
+                    }
+                }
+
+                RefreshInventory();
+            }
         }
     }
 
     private bool CraftRecipe(ScriptableRecipe recipe)
     {
         bool areItemsEqual = recipe.RecipeIngerdients.Count == SlotsIngredients.Count &&
-                              recipe.RecipeIngerdients.All(SlotsIngredients.Contains);
+                               recipe.RecipeIngerdients.All(SlotsIngredients.Contains);
       
         return areItemsEqual;
     }

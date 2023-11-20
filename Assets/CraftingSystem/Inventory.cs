@@ -38,7 +38,7 @@ public class Inventory : MonoBehaviour
         {
             if (slot.item == null)
             {
-                itemSlot.AddIteminTheSlot(itemSlot.item, itemSlot.GetItemCount() / 2, slot.transform);
+                itemSlot.AddIteminTheSlotWithItem(itemSlot.item, itemSlot.GetItemCount() / 2, slot.transform);
                 itemSlot.SetItemCount(itemSlot.GetItemCount() / 2);
                 Debug.Log("Did Split Element");
                 break;

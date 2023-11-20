@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
@@ -23,7 +24,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
    
 
   
-    private void Initializtion(int itemCount)
+    public void Initializtion(int itemCount)
     {
         item = GetComponentInChildren<Item>();
         if (item != null)
@@ -52,14 +53,22 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
       
-    public void AddIteminTheSlot(Item _item,int itemCount,Transform slot)
+    public void AddIteminTheSlotWithItem(Item _item,int itemCount,Transform slot)
     {
         GameObject prefabObj = Instantiate(itemPrefab, slot);
         prefabObj.GetComponent<Item>().scriptableItem = _item.scriptableItem;
         prefabObj.GetComponent<Item>().InitializeItem();
         prefabObj.transform.parent.GetComponent<ItemSlot>().Initializtion(itemCount);
     }
-  
+
+    public void AddIteminTheSlotWithScriptableItem(ScriptableItem _item, int itemCount, Transform slot)
+    {
+        GameObject prefabObj = Instantiate(itemPrefab, slot);
+        prefabObj.GetComponent<Item>().scriptableItem = _item;
+        prefabObj.transform.parent.GetComponent<ItemSlot>().Initializtion(itemCount);
+    }
+
+
     public void UpdateGraphic()
     {
         if (count < 1)
@@ -76,22 +85,9 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
-    public void UseItemInSlot()
-    {
-        if (CanUseItem())
-        {
-            item.scriptableItem.Use();
-            if (item.scriptableItem.isConsumable)
-            {
-              //  Count--;
-            }
-        }
-    }
+   
 
-    private bool CanUseItem()
-    {
-        return (item != null && count > 0);
-    }
+   
 
     
     public void OnPointerEnter(PointerEventData eventData)

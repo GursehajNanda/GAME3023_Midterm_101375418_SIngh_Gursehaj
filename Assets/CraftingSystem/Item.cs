@@ -52,14 +52,16 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     
 
-    public Image GetIcon()
-    {
-        return image;
-    }
+    
 
     public TextMeshProUGUI GetItemCountText()
     {
         return itemCountText;
+    }
+
+    public Image GetIcon()
+    {
+        return image;
     }
 
     public void SetIcon(Image icon)
