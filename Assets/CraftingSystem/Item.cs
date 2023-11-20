@@ -7,6 +7,7 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 {
     private Image image;
     private TextMeshProUGUI itemCountText;
+    private int count = 0;
 
     [HideInInspector] public Transform parentAfterDrag;
     public ScriptableItem scriptableItem;
@@ -15,7 +16,9 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         image = GetComponent<Image>();
         itemCountText = GetComponentInChildren<TextMeshProUGUI>();
+        SetItemCount(scriptableItem.itemcount);
     }
+
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -55,5 +58,15 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     public void SetCountText(string text)
     {
         itemCountText.SetText(text);
+    }
+
+    public void SetItemCount(int itemCount)
+    {
+        count = itemCount;
+    }
+
+    public int GetItemCount()
+    {
+        return count;
     }
 }

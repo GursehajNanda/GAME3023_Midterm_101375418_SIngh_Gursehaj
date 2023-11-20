@@ -10,7 +10,6 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [HideInInspector]
     public Item item = null;
-    //private int count = 0;
   
     [SerializeField]
     private TMPro.TextMeshProUGUI descriptionText;
@@ -36,18 +35,16 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
   
     void UpdateGraphic()
     {
-        if (item.scriptableItem.itemcount < 1)
+        if (item.GetItemCount() < 1)
         {
-            item = null;
-            item.GetIcon().gameObject.SetActive(false);
-            item.GetItemCountText().gameObject.SetActive(false);
+            Destroy(item.gameObject);
         }
         else
         {
             item.GetIcon().sprite = item.scriptableItem.icon;
             item.GetIcon().gameObject.SetActive(true);
             item.GetItemCountText().gameObject.SetActive(true);
-            item.GetItemCountText().text = item.scriptableItem.itemcount.ToString();
+            item.GetItemCountText().text = item.GetItemCount().ToString();
     
         }
     }
@@ -66,7 +63,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private bool CanUseItem()
     {
-        return (item != null && item.scriptableItem.itemcount > 0);
+        return (item != null && item.GetItemCount() > 0);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -101,8 +98,8 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             {
                 if (draggableItem.scriptableItem.name == item.scriptableItem.name)
                 {
-                    item.scriptableItem.itemcount += draggableItem.scriptableItem.itemcount;
-                    item.GetItemCountText().text = item.scriptableItem.itemcount.ToString();
+                    item.SetItemCount(draggableItem.scriptableItem.itemcount + item.GetItemCount());
+                    item.GetItemCountText().text = item.GetItemCount().ToString();
                     Destroy(draggableItem.gameObject);
                 }
             }
