@@ -7,7 +7,7 @@ public class Inventory : MonoBehaviour
     List<ItemSlot> itemSlots = new List<ItemSlot>();
 
     [SerializeField]
-    GameObject inventoryPanel;
+    Transform inventoryPanel;
 
     float timer;
    
