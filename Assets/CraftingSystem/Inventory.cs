@@ -9,37 +9,51 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     GameObject inventoryPanel;
 
-    void Start()
+    float timer;
+   
+    private void Awake()
+    {
+        ItemSlot.SplitItemEvent += HandleSplitItemEvent;
+    }
+
+    private void InitializeInventory()
     {
         itemSlots = new List<ItemSlot>(
             inventoryPanel.transform.GetComponentsInChildren<ItemSlot>()
             );
-
-        ItemSlot.SplitItemEvent += HandleSplitItemEvent;
     }
+
+    void Start()
+    {
+        InitializeInventory();
+    }
+
+
 
     private void HandleSplitItemEvent(ItemSlot itemSlot)
     {
-        foreach(ItemSlot slot in itemSlots)
+        RefreshInventory();
+
+        foreach (ItemSlot slot in itemSlots)
         {
-            if(slot.item == null)
+            if (slot.item == null)
             {
-                itemSlot.AddIteminTheSlot(itemSlot.item, itemSlot.GetItemCount()/2,slot.transform);
+                itemSlot.AddIteminTheSlot(itemSlot.item, itemSlot.GetItemCount() / 2, slot.transform);
                 itemSlot.SetItemCount(itemSlot.GetItemCount() / 2);
-               // slot.UpdateGraphic();
                 Debug.Log("Did Split Element");
                 break;
             }
         }
+
+        
     }
 
     private void RefreshInventory()
     {
-
+        itemSlots.Clear();
+        InitializeInventory();
     }
 
-    private void Update()
-    {
-       //foreach
-    }
+   
+    
 }

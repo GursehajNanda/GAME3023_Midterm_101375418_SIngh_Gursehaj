@@ -1,10 +1,10 @@
 using System;
-using TMPro;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler, IPointerDownHandler
+public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler, IPointerClickHandler
 {
     [HideInInspector]
     public Item item = null;
@@ -19,6 +19,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public static event Action<ItemSlot> SplitItemEvent;
     private int count;
 
+  
     private void Initializtion(int itemCount)
     {
         item = GetComponentInChildren<Item>();
@@ -32,6 +33,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void Awake()
     {
+
         item = GetComponentInChildren<Item>();
         if (item != null)
         {
@@ -107,16 +109,23 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+   
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            if (item != null  && count > 1)
-            {
-                SplitItemEvent?.Invoke(this);
-            }
+            SplitItem();  
         }
     }
+
+    void SplitItem()
+    {
+        if (item != null && count > 1)
+        {
+            SplitItemEvent?.Invoke(this);
+        }
+    }
+
 
     public void OnDrop(PointerEventData eventData)
     {   
