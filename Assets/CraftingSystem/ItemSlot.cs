@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler
+public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler, IPointerDownHandler
 {
     [HideInInspector]
     public Item item = null;
@@ -15,6 +13,22 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private TMPro.TextMeshProUGUI descriptionText;
     [SerializeField]
     private TMPro.TextMeshProUGUI nameText;
+    [SerializeField]
+    private GameObject itemPrefab;
+
+    public static event Action<ItemSlot> SplitItemEvent;
+    private int count;
+
+    private void Initializtion(int itemCount)
+    {
+        item = GetComponentInChildren<Item>();
+        if (item != null)
+        {
+            item.InitializeItem();
+            SetItemCount(itemCount);
+            UpdateGraphic();
+        }
+    }
 
     private void Awake()
     {
@@ -22,20 +36,28 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (item != null)
         {
             item.InitializeItem();
+            SetItemCount(item.scriptableItem.itemcount);
             UpdateGraphic();
         }
     }
-
 
     private void Update()
     {
         item = GetComponentInChildren<Item>();
     }
 
-  
-    void UpdateGraphic()
+      
+    public void AddIteminTheSlot(Item _item,int itemCount,Transform slot)
     {
-        if (item.GetItemCount() < 1)
+        GameObject prefabObj = Instantiate(itemPrefab, slot);
+        prefabObj.GetComponent<Item>().scriptableItem = _item.scriptableItem;
+        prefabObj.GetComponent<Item>().InitializeItem();
+        prefabObj.transform.parent.GetComponent<ItemSlot>().Initializtion(itemCount);
+    }
+  
+    public void UpdateGraphic()
+    {
+        if (count < 1)
         {
             Destroy(item.gameObject);
         }
@@ -44,7 +66,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             item.GetIcon().sprite = item.scriptableItem.icon;
             item.GetIcon().gameObject.SetActive(true);
             item.GetItemCountText().gameObject.SetActive(true);
-            item.GetItemCountText().text = item.GetItemCount().ToString();
+            item.GetItemCountText().text = count.ToString();
     
         }
     }
@@ -63,9 +85,10 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private bool CanUseItem()
     {
-        return (item != null && item.GetItemCount() > 0);
+        return (item != null && count > 0);
     }
 
+    
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (item != null)
@@ -84,10 +107,22 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if (item != null  && count > 1)
+            {
+                SplitItemEvent?.Invoke(this);
+            }
+        }
+    }
+
     public void OnDrop(PointerEventData eventData)
     {   
         GameObject dropped = eventData.pointerDrag;
         Item draggableItem = dropped.GetComponent<Item>();
+
         if (transform.childCount == 0)
         {
             draggableItem.parentAfterDrag = transform;
@@ -98,13 +133,23 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             {
                 if (draggableItem.scriptableItem.name == item.scriptableItem.name)
                 {
-                    item.SetItemCount(draggableItem.scriptableItem.itemcount + item.GetItemCount());
-                    item.GetItemCountText().text = item.GetItemCount().ToString();
+                    SetItemCount(draggableItem.scriptableItem.itemcount + GetItemCount());
+                    item.GetItemCountText().text = count.ToString();
                     Destroy(draggableItem.gameObject);
                 }
             }
         }
     }
 
-   
+    public void SetItemCount(int itemCount)
+    {
+        count = itemCount;
+        UpdateGraphic();
+    }
+
+    public int GetItemCount()
+    {
+        return count;
+    }
+
 }

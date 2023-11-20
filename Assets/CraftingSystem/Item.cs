@@ -7,38 +7,50 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 {
     private Image image;
     private TextMeshProUGUI itemCountText;
-    private int count = 0;
-
     [HideInInspector] public Transform parentAfterDrag;
     public ScriptableItem scriptableItem;
+
 
     public void InitializeItem()
     {
         image = GetComponent<Image>();
         itemCountText = GetComponentInChildren<TextMeshProUGUI>();
-        SetItemCount(scriptableItem.itemcount);
     }
 
+   
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        parentAfterDrag = transform.parent;
-        transform.SetParent(transform.root);
-        transform.SetAsLastSibling();
-        image.raycastTarget = false;
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            parentAfterDrag = transform.parent;
+            transform.SetParent(transform.root);
+            transform.SetAsLastSibling();
+            image.raycastTarget = false;
+        }
 
     }
 
+
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = Input.mousePosition;
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            transform.position = Input.mousePosition;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        transform.SetParent(parentAfterDrag);
-        image.raycastTarget = true;
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            transform.SetParent(parentAfterDrag);
+            image.raycastTarget = true;
+        }
+        
     }
+
+    
 
     public Image GetIcon()
     {
@@ -60,13 +72,5 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         itemCountText.SetText(text);
     }
 
-    public void SetItemCount(int itemCount)
-    {
-        count = itemCount;
-    }
-
-    public int GetItemCount()
-    {
-        return count;
-    }
+   
 }
