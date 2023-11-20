@@ -13,8 +13,9 @@ public class CraftingInventory : MonoBehaviour
     Transform inventoryPanel;
     [SerializeField]
     ItemSlot outPutSlot;
+    //ScriptableRecipe scriptableRecipe;
     [SerializeField]
-    public ScriptableRecipe scriptableRecipe;
+    public List<ScriptableRecipe> scriptableRecipes;
     [SerializeField]
     Sprite defaultImage;
 
@@ -23,14 +24,6 @@ public class CraftingInventory : MonoBehaviour
         itemSlots = new List<ItemSlot>(
             inventoryPanel.transform.GetComponentsInChildren<ItemSlot>()
             );
-
-        foreach (ItemSlot slots in itemSlots)
-        {
-            if (slots.item != null)
-            {
-                SlotsIngredients.Add(slots.item.scriptableItem.itemName);
-            }
-        }
     }
 
     void Start()
@@ -40,16 +33,39 @@ public class CraftingInventory : MonoBehaviour
 
     private void Update()
     {
-        if(SlotsIngredients.Count>0)
+        foreach (ItemSlot slots in itemSlots)
         {
-            if (CraftRecipe(scriptableRecipe))
+            if (slots.item != null)
             {
-                outPutSlot.item.GetIcon().sprite = scriptableRecipe.OututItemSprite;
+                SlotsIngredients.Add(slots.item.scriptableItem.itemName);
             }
-            else
+        }
+
+
+        if (SlotsIngredients.Count>0)
+        {
+            //if (CraftRecipe(scriptableRecipe))
+            //{
+            //   outPutSlot.item.GetIcon().sprite = scriptableRecipe.OututItemSprite;
+            //}
+            //else
+            //{
+            //   outPutSlot.item.GetIcon().sprite = defaultImage;
+            //}
+
+            foreach (ScriptableRecipe recipe in scriptableRecipes)
             {
-                outPutSlot.item.GetIcon().sprite = defaultImage;
+                if (CraftRecipe(recipe))
+                {
+                    outPutSlot.item.GetIcon().sprite = recipe.OututItemSprite;
+                    break;
+                }
+                else
+                {
+                    outPutSlot.item.GetIcon().sprite = defaultImage;
+                }
             }
+
             RefreshInventory();
         }
     }
