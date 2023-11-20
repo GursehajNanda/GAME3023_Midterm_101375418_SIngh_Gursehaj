@@ -12,7 +12,7 @@ public class ScriptableItem : ScriptableObject //Extending SO allows us to have 
     public string description = "";
     public bool isConsumable = false;
     public bool isStakable = false;
-    public int itemcount =1;
+   
 
     public void Use()
     {

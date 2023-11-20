@@ -15,9 +15,11 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private TMPro.TextMeshProUGUI nameText;
     [SerializeField]
     private GameObject itemPrefab;
+    [SerializeField]
+    private int count;
 
     public static event Action<ItemSlot> SplitItemEvent;
-    private int count;
+   
 
   
     private void Initializtion(int itemCount)
@@ -38,7 +40,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (item != null)
         {
             item.InitializeItem();
-            SetItemCount(item.scriptableItem.itemcount);
+            item.SetItemCount(count);
             UpdateGraphic();
         }
     }
@@ -131,10 +133,11 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {   
         GameObject dropped = eventData.pointerDrag;
         Item draggableItem = dropped.GetComponent<Item>();
-
+       
         if (transform.childCount == 0)
         {
             draggableItem.parentAfterDrag = transform;
+            count = draggableItem.GetItemCount();
         }
         else
         {
@@ -142,7 +145,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             {
                 if (draggableItem.scriptableItem.name == item.scriptableItem.name)
                 {
-                    SetItemCount(draggableItem.scriptableItem.itemcount + GetItemCount());
+                    SetItemCount(draggableItem.GetItemCount() + GetItemCount());
                     item.GetItemCountText().text = count.ToString();
                     Destroy(draggableItem.gameObject);
                 }
@@ -153,6 +156,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void SetItemCount(int itemCount)
     {
         count = itemCount;
+        item.SetItemCount(itemCount);
         UpdateGraphic();
     }
 

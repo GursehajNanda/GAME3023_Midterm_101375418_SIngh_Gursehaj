@@ -9,7 +9,7 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     private TextMeshProUGUI itemCountText;
     [HideInInspector] public Transform parentAfterDrag;
     public ScriptableItem scriptableItem;
-
+    private int itemCount;
 
     public void InitializeItem()
     {
@@ -72,5 +72,13 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         itemCountText.SetText(text);
     }
 
-   
+    public int GetItemCount()
+    {
+        return itemCount;
+    }
+
+    public void SetItemCount(int count)
+    {
+        itemCount = count;
+    }
 }
