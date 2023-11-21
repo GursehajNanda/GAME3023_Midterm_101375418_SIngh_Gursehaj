@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Crystal
   m_EditorClassIdentifier: 
   RecipeIngerdients:
-  - A_Armour03
+  - A_Armour02
   OutputItem: {fileID: 11400000, guid: 19dff5a9aa1b1964893f1d2a0fc5f924, type: 2}
   ConsumeAmount: 1
   OutputAmount: 4
