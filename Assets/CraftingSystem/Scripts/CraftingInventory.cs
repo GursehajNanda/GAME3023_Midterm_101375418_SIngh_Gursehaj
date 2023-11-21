@@ -35,35 +35,39 @@ public class CraftingInventory : MonoBehaviour
 
     private void Update()
     {
-        foreach (ItemSlot slots in itemSlots)
-        {
-            if (slots.item != null)
-            {
-                SlotsIngredients.Add(slots.item.scriptableItem.itemName);
-            }
-        }
+     
 
         if (outPutSlot.item == null)
         {
+            foreach (ItemSlot slots in itemSlots)
+            {
+                if (slots.item != null)
+                {
+                    SlotsIngredients.Add(slots.item.scriptableItem.itemName);
+                }
+            }
+
             if (SlotsIngredients.Count > 0)
             {
-
                 foreach (ScriptableRecipe recipe in scriptableRecipes)
                 {
                     if (CraftRecipe(recipe))
                     {
-                        Debug.Log("true");
-                        outPutSlot.AddIteminTheSlotWithScriptableItem(recipe.OutputItem,1, outPutSlot.transform);
-               
-
-                        foreach (ItemSlot slots in itemSlots)
+                        if (CheckRequireAmount(recipe))
                         {
-                            slots.Initializtion(slots.GetItemCount() - recipe.ConsumeAmount);
+                            outPutSlot.AddIteminTheSlotWithScriptableItem(recipe.OutputItem, 1, outPutSlot.transform);
+
+
+                            foreach (ItemSlot slots in itemSlots)
+                            {
+                                slots.Initializtion(slots.GetItemCount() - recipe.ConsumeAmount);
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
 
+               
                 RefreshInventory();
             }
         }
@@ -75,6 +79,21 @@ public class CraftingInventory : MonoBehaviour
                                recipe.RecipeIngerdients.All(SlotsIngredients.Contains);
       
         return areItemsEqual;
+    }
+
+    private bool CheckRequireAmount(ScriptableRecipe recipe)
+    {
+        foreach (ItemSlot slots in itemSlots)
+        {
+            if ((slots.item != null))
+            {
+                if (slots.GetItemCount() < recipe.ConsumeAmount)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void RefreshInventory()

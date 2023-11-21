@@ -57,7 +57,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         GameObject prefabObj = Instantiate(itemPrefab, slot);
         prefabObj.GetComponent<Item>().scriptableItem = _item.scriptableItem;
-        prefabObj.GetComponent<Item>().InitializeItem();
+     //   prefabObj.GetComponent<Item>().InitializeItem();
         prefabObj.transform.parent.GetComponent<ItemSlot>().Initializtion(itemCount);
     }
 
