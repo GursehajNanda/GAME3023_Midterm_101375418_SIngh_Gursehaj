@@ -15,4 +15,4 @@ MonoBehaviour:
   itemName: A_Armour03
   icon: {fileID: 21300000, guid: 24d2948fefc2b8e4697f371067257b69, type: 3}
   description: Rare Armor
-  isStakable: 0
+  isStakable: 1

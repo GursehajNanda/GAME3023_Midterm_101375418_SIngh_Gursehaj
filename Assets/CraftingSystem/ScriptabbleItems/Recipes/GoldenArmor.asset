@@ -16,4 +16,5 @@ MonoBehaviour:
   - A_Armour02
   - I_GoldBar
   OutputItem: {fileID: 11400000, guid: 805d6840fee869648bb944c52d21d99a, type: 2}
-  ConsumeAmount: 1
+  ConsumeAmount: 2
+  OutputAmount: 2

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8290b75b2cbd6af45b7ad408c0444bf8, type: 3}
-  m_Name: I_Diamond
+  m_Name: I_Rock04
   m_EditorClassIdentifier: 
-  itemName: I_Diamond
-  icon: {fileID: 21300000, guid: 79a1b45fee642644aa44c501bbbb925f, type: 3}
-  description: Diamong. Expesive good for sellin.
+  itemName: I_Rock04
+  icon: {fileID: 21300000, guid: da95db341da44424f8ee2d1e5a4ae677, type: 3}
+  description: Crytal Ore. Very Expensive
   isStakable: 1

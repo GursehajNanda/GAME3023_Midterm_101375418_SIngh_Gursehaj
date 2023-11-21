@@ -8,4 +8,5 @@ public class ScriptableRecipe : ScriptableObject
     public List<string> RecipeIngerdients;
     public ScriptableItem OutputItem;
     public int ConsumeAmount = 1;
+    public int OutputAmount = 1;
 }

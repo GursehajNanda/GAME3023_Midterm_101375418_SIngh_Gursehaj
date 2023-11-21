@@ -56,7 +56,7 @@ public class CraftingInventory : MonoBehaviour
                         if (CheckRequireAmount(recipe))
                         {
                             outPutSlot.AddIteminTheSlotWithScriptableItem(recipe.OutputItem, 1, outPutSlot.transform);
-
+                            outPutSlot.Initializtion(recipe.OutputAmount);
 
                             foreach (ItemSlot slots in itemSlots)
                             {
@@ -102,4 +102,5 @@ public class CraftingInventory : MonoBehaviour
         SlotsIngredients.Clear();
         InitializeInventory();
     }
+
 }

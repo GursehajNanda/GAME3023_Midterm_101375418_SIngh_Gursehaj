@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: I_GoldBar
   icon: {fileID: 21300000, guid: 85c8c026991b4404ebe5bacaed13d132, type: 3}
-  description: assad
-  isConsumable: 0
+  description: Golbar expesive. Good for Equipment building
   isStakable: 1

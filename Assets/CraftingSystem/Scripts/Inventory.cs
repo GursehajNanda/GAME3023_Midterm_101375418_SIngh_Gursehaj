@@ -40,7 +40,6 @@ public class Inventory : MonoBehaviour
             {
                 itemSlot.AddIteminTheSlotWithItem(itemSlot.item, itemSlot.GetItemCount() / 2, slot.transform);
                 itemSlot.SetItemCount(itemSlot.GetItemCount() / 2);
-                Debug.Log("Did Split Element");
                 break;
             }
         }
