@@ -50,10 +50,6 @@ public class Item : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         
     }
 
-    
-
-    
-
     public TextMeshProUGUI GetItemCountText()
     {
         return itemCountText;

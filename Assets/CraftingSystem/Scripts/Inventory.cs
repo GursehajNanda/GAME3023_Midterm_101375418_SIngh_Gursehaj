@@ -9,7 +9,6 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     Transform inventoryPanel;
 
-    float timer;
    
     private void Awake()
     {
@@ -32,14 +31,21 @@ public class Inventory : MonoBehaviour
 
     private void HandleSplitItemEvent(ItemSlot itemSlot)
     {
+        if (itemSlot.GetItemCount() <= 1) return;
+
         RefreshInventory();
 
         foreach (ItemSlot slot in itemSlots)
         {
             if (slot.item == null)
             {
-                itemSlot.AddIteminTheSlotWithItem(itemSlot.item, itemSlot.GetItemCount() / 2, slot.transform);
-                itemSlot.SetItemCount(itemSlot.GetItemCount() / 2);
+                int total = itemSlot.GetItemCount();
+
+                int half1 = Mathf.CeilToInt(total / 2f); 
+                int half2 = total - half1;             
+
+                itemSlot.AddIteminTheSlotWithItem(itemSlot.item, half2, slot.transform);
+                itemSlot.SetItemCount(half1);
                 break;
             }
         }

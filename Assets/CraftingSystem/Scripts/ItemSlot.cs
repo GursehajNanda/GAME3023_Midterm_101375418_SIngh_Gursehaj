@@ -18,10 +18,11 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private GameObject itemPrefab;
     [SerializeField]
     private int count;
-  
+    [SerializeField]
+    public bool m_isOutputSlot = false;
 
     public static event Action<ItemSlot> SplitItemEvent;
-   
+    
 
   
     public void Initializtion(int itemCount)
@@ -110,6 +111,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
    
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (m_isOutputSlot) return;
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             SplitItem();  
@@ -137,6 +139,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
         else
         {
+            if (m_isOutputSlot) return;
             if (draggableItem.scriptableItem.isStakable)
             {
                 if (draggableItem.scriptableItem.name == item.scriptableItem.name)

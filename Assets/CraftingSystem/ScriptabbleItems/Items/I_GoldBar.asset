@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e281cf19c2f509b448d93f883f85198b, type: 3}
-  m_Name: A_Shoes05
+  m_Script: {fileID: 11500000, guid: 8290b75b2cbd6af45b7ad408c0444bf8, type: 3}
+  m_Name: I_GoldBar
   m_EditorClassIdentifier: 
-  RecipeIngerdients:
-  - A_Shoes01
-  - I_Diamond
-  OutputItem: {fileID: 11400000, guid: fdd5b3129b73fb344b71faa055d85c40, type: 2}
-  ConsumeAmount: 1
-  OutputAmount: 1
+  itemName: I_GoldBar
+  icon: {fileID: 21300000, guid: 85c8c026991b4404ebe5bacaed13d132, type: 3}
+  description: Golbar expesive. Good for Equipment building
+  isStakable: 1

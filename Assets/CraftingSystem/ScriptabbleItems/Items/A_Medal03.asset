@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8290b75b2cbd6af45b7ad408c0444bf8, type: 3}
-  m_Name: Goldbar
+  m_Name: A_Medal03
   m_EditorClassIdentifier: 
-  itemName: I_GoldBar
-  icon: {fileID: 21300000, guid: 85c8c026991b4404ebe5bacaed13d132, type: 3}
-  description: Golbar expesive. Good for Equipment building
+  itemName: A_Medal03
+  icon: {fileID: 21300000, guid: 7d7768f5b484dc5459633d28a5c2e998, type: 3}
+  description: Bronze Medal
   isStakable: 1

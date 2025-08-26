@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>%UNITY_WEB_NAME%</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;         /* avoid double scrollbars */
+      background: #000;         /* optional */
+      touch-action: none;       /* lets Unity handle gestures */
+    }
+    #unity-container {
+      position: fixed;
+      inset: 0;                 /* top:0;right:0;bottom:0;left:0 */
+      width: 100vw;
+      height: 100vh;
+    }
+    #unity-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;           /* removes inline-gap */
+      background: #000;         /* optional loading bg */
+    }
+    #loading {                  /* minimal loader */
+      position: absolute; inset: 0;
+      display: grid; place-items: center;
+      color: #fff; font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="unity-container">
+    <div id="loading">Loading…</div>
+    <canvas id="unity-canvas" tabindex="0"></canvas>
+  </div>
+
+  <script>
+    // Orientation lock (optional). Must be called after a user gesture on HTTPS.
+    async function lockOrientation(orient = 'landscape') {
+      try { await screen.orientation.lock(orient); } catch (e) {}
+    }
+
+    // Unity loader
+    const buildUrl = "%UNITY_WEBGL_BUILD_URL%";
+    const loaderUrl = buildUrl + "/%UNITY_LOADER_FILENAME%";
+    const config = {
+      dataUrl: buildUrl + "/%UNITY_DATA_FILENAME%",
+      frameworkUrl: buildUrl + "/%UNITY_FRAMEWORK_FILENAME%",
+      codeUrl: buildUrl + "/%UNITY_CODE_FILENAME%",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "%UNITY_COMPANY_NAME%",
+      productName: "%UNITY_PRODUCT_NAME%",
+      productVersion: "%UNITY_PRODUCT_VERSION%",
+      // Important for crispness & perf on phones:
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5), // cap DPI for perf
+      matchWebGLToCanvasSize: true                                   // resize with canvas
+    };
+
+    const canvas = document.getElementById("unity-canvas");
+
+    // Keep canvas matched to viewport on resize / rotate
+    function resizeCanvas() {
+      // The CSS already makes it fill the screen; forcing redraw helps some browsers.
+      canvas.width  = canvas.clientWidth  * config.devicePixelRatio;
+      canvas.height = canvas.clientHeight * config.devicePixelRatio;
+    }
+    addEventListener('resize', resizeCanvas);
+    addEventListener('orientationchange', resizeCanvas);
+
+    // Load Unity
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = () => {
+      createUnityInstance(canvas, config, (progress) => {
+        // simple loader: hide when done
+        if (progress >= 1) document.getElementById('loading').style.display = 'none';
+      }).then((unityInstance) => {
+        resizeCanvas(); // ensure correct size at start
+        // Example: lockOrientation('landscape'); // call from a Play button for reliability
+      });
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
